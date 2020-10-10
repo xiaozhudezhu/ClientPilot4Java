@@ -45,7 +45,7 @@ public class ServerFunctionOperate
 			}
 			String mps = c.getMultiPowString(i);
 			mpList.add(mps);
-			ArrayList<Integer> indList = c.getMultiPowIndex(mps);
+			List<Integer> indList = c.getMultiPowIndex(mps);
 			if (indList.size() == 1)
 			{
 				res.multiPow.add(c.multiPow.get(indList.get(0)));

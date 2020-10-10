@@ -41,7 +41,7 @@ public class LocalFuctionLib
 			}
 			ysum += y;
 		}
-		double yavg = ysum / yList.size();
+		//double yavg = ysum / yList.size();
 		double kmin = 10;
 		double kmax = 0;
 		double ksum = 0;
@@ -76,54 +76,44 @@ public class LocalFuctionLib
 			if (kmax - k2 <= kmax * 0.1)
 			{
 				c10++;
-				Integer temp = cList.get(0);
-				temp ++;
+				cList.set(0, cList.get(0) + 1);
 			}
 			else if (kmax - k2 <= kmax * 0.2)
 			{
 				c20++;
-				Integer temp = cList.get(1);
-				temp ++;
+				cList.set(1, cList.get(1) + 1);
 			}
 			else if (kmax - k2 <= kmax * 0.3)
 			{
-				Integer temp = cList.get(2);
-				temp ++;
+				cList.set(2, cList.get(2) + 1);
 			}
 			else if (kmax - k2 <= kmax * 0.4)
 			{
-				Integer temp = cList.get(3);
-				temp ++;
+				cList.set(3, cList.get(3) + 1);
 			}
 			else if (kmax - k2 <= kmax * 0.5)
 			{
-				Integer temp = cList.get(4);
-				temp ++;
+				cList.set(4, cList.get(4) + 1);
 			}
 			else if (kmax - k2 <= kmax * 0.6)
 			{
-				Integer temp = cList.get(5);
-				temp ++;
+				cList.set(5, cList.get(5) + 1);
 			}
 			else if (kmax - k2 <= kmax * 0.7)
 			{
-				Integer temp = cList.get(6);
-				temp ++;
+				cList.set(6, cList.get(6) + 1);
 			}
 			else if (kmax - k2 <= kmax * 0.8)
 			{
-				Integer temp = cList.get(7);
-				temp ++;
+				cList.set(7, cList.get(7) + 1);
 			}
 			else if (kmax - k2 <= kmax * 0.9)
 			{
-				Integer temp = cList.get(8);
-				temp ++;
+				cList.set(8, cList.get(8) + 1);
 			}
 			else if (kmax - k2 <= kmax * 1)
 			{
-				Integer temp = cList.get(9);
-				temp ++;
+				cList.set(9, cList.get(9) + 1);
 			}
 			if (k2 <= kmin * 1.2)
 			{
@@ -146,53 +136,43 @@ public class LocalFuctionLib
 		{
 			if (y - ymin <= ygap * 0.1)
 			{
-				Double temp = ycList.get(0);
-				temp ++;
+				ycList.set(0, ycList.get(0) + 1);
 			}
 			else if (y - ymin <= ygap * 0.2)
 			{
-				Double temp = ycList.get(1);
-				temp ++;
+				ycList.set(1, ycList.get(1) + 1);
 			}
 			else if (y - ymin <= ygap * 0.3)
 			{
-				Double temp = ycList.get(2);
-				temp ++;
+				ycList.set(2, ycList.get(2) + 1);
 			}
 			else if (y - ymin <= ygap * 0.4)
 			{
-				Double temp = ycList.get(3);
-				temp ++;
+				ycList.set(3, ycList.get(3) + 1);
 			}
 			else if (y - ymin <= ygap * 0.5)
 			{
-				Double temp = ycList.get(4);
-				temp ++;
+				ycList.set(4, ycList.get(4) + 1);
 			}
 			else if (y - ymin <= ygap * 0.6)
 			{
-				Double temp = ycList.get(5);
-				temp ++;
+				ycList.set(5, ycList.get(5) + 1);
 			}
 			else if (y - ymin <= ygap * 0.7)
 			{
-				Double temp = ycList.get(6);
-				temp ++;
+				ycList.set(6, ycList.get(6) + 1);
 			}
 			else if (y - ymin <= ygap * 0.8)
 			{
-				Double temp = ycList.get(7);
-				temp ++;
+				ycList.set(7, ycList.get(7) + 1);
 			}
 			else if (y - ymin <= ygap * 0.9)
 			{
-				Double temp = ycList.get(8);
-				temp ++;
+				ycList.set(8, ycList.get(8) + 1);
 			}
 			else if (y - ymin <= ygap * 1)
 			{
-				Double temp = ycList.get(9);
-				temp ++;
+				ycList.set(9, ycList.get(9) + 1);
 			}
 		}
 		double crmax = 0;
@@ -350,8 +330,7 @@ public class LocalFuctionLib
 		for (List<Double> point : points)
 		{
 			//swinginwind
-			//point.set(0, (int)point.get(0) * scaleX);
-			point.set(0, point.get(0) * scaleX);
+			point.set(0, Math.floor((point.get(0) * scaleX)));
 			point.set(1, point.get(1) * scaleY);
 		}
 		return points;
@@ -398,6 +377,7 @@ public class LocalFuctionLib
 		double x2 = points.get(p1i + 1).get(0);
 		double t = 0;
 		double delta = Math.pow((2 * x2 - 2 * x1), 2) - 4 * (x1 - 2 * x2 + x3) * (x1 - x);
+		
 		if (delta >= 0)
 		{
 			t = (2 * x1 - 2 * x2 + Math.sqrt(delta)) / (2 * (x1 - 2 * x2 + x3));
@@ -405,12 +385,16 @@ public class LocalFuctionLib
 			double y2 = points.get(p1i + 1).get(1);
 			double y3 = points.get(p3i).get(1);
 			y = Math.pow((1 - t), 2) * y1 + 2 * t * (1 - t) * y2 + Math.pow(t, 2) * y3;
+			
 		}
 		else
 		{
 			throw new RuntimeException("negative delta");
 		}
 //C# TO JAVA CONVERTER TODO TASK: Math.Round can only be converted to Java's Math.round if just one argument is used:
+		if(Double.isNaN(y) || Double.isInfinite(y)) {
+			return 0d;
+		}
 		BigDecimal bg = new BigDecimal(y).setScale(5, RoundingMode.UP);
 		return bg.doubleValue();
 	}

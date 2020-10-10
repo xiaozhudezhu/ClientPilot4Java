@@ -755,7 +755,7 @@ public class GMap
 		}
 		double y2 = (k0 * k1 * (x1 - x0) + k1 * y0 - k0 * y1) / (k1 - k0);
 		double x2 = k0 == 0 ? (y2 - y1) / k1 + x1 : (y2 - y0) / k0 + x0;
-		double yt = GetLineMatchingValue(x, px, py);
+		//double yt = GetLineMatchingValue(x, px, py);
 		double y2t = GetLineMatchingValue(x2, px, py);
 		double y2n = y2 = 2 * y2t - y2;
 		//y2n = 2 * y2n - y2;

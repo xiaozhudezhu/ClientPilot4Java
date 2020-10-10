@@ -22,12 +22,12 @@ public class Cipher
 		cipherItems = (List<Double>[]) cipherItemList.toArray();
 	}
 	
-	public final double[] getCipherItem(int index)
+	public double[] getCipherItem(int index)
 	{
 		double[] ci = new double[] { cipherItems[0].get(index), cipherItems[1].get(index), cipherItems[2].get(index) };
 		return ci;
 	}
-	public final double[] getCipherItemsByCPM(String cpm)
+	public double[] getCipherItemsByCPM(String cpm)
 	{
 		int index = -1;
 		for (int i = 0; i < multiPow.size(); i++)
@@ -42,13 +42,13 @@ public class Cipher
 		double[] ci = index >= 0 ? new double[] { cipherItems[0].get(index), cipherItems[1].get(index), cipherItems[2].get(index) } : null;
 		return ci;
 	}
-	public final void addCipherItem(double[] ci)
+	public void addCipherItem(double[] ci)
 	{
 		cipherItems[0].add(ci[0]);
 		cipherItems[1].add(ci[1]);
 		cipherItems[2].add(ci[2]);
 	}
-	public final void addMultiPow(int stage, int site, int power)
+	public void addMultiPow(int stage, int site, int power)
 	{
 		ArrayList<Integer> cmp = new ArrayList<Integer>();
 		for (int i = 0; i < stage; i++)
@@ -62,7 +62,7 @@ public class Cipher
 			maxPower.set(site, power);
 		}
 	}
-	public final String getMultiPowString(int index)
+	public String getMultiPowString(int index)
 	{
 		List<Integer> cmp = multiPow.get(index);
 		String res = "";
@@ -72,7 +72,7 @@ public class Cipher
 		}
 		return res.substring(0, res.length() - 1);
 	}
-	public final ArrayList<Integer> getMultiPowIndex(String cmp)
+	public List<Integer> getMultiPowIndex(String cmp)
 	{
 		ArrayList<Integer> res = new ArrayList<Integer>();
 		for (int i = 0; i < multiPow.size(); i++)
@@ -90,7 +90,7 @@ public class Cipher
 		}
 		return res;
 	}
-	public final void Sort()
+	public void Sort()
 	{
 		//升幂排列，二元
 		List<String> mpList = new ArrayList<String>();
@@ -145,7 +145,7 @@ public class Cipher
 		res += "0"; // cipherItems[3][0].ToString();
 		return res;
 	}
-	public final String ToShortString()
+	public String ToShortString()
 	{
 		String res = "";
 		for (int i = 1; i < cipherItems[0].size(); i++)
@@ -156,7 +156,7 @@ public class Cipher
 		res = res.substring(0, res.length() - 1);
 		return res;
 	}
-	public final void GenFromValue(double value, int stage)
+	public void GenFromValue(double value, int stage)
 	{
 		for (int i = 0; i < stage + 1; i++)
 		{
@@ -166,7 +166,7 @@ public class Cipher
 		}
 		//cipherItems[3].Add(value);
 	}
-	public final String GetValueToJson()
+	/*public String GetValueToJson()
 	{
 		String result = "[";
 		for(int i=0;i<cipherItems[0].size();i++)
@@ -176,7 +176,7 @@ public class Cipher
 		result = result.substring(0, result.length() - 1) + "]";
 		return result;
 	}
-	public final String GetValueToJsonWithPower()
+	public String GetValueToJsonWithPower()
 	{
 		String result = "[";
 		for (int i = 0; i < cipherItems[0].size(); i++)
@@ -186,7 +186,7 @@ public class Cipher
 		result = result.substring(0, result.length() - 1) + "]";
 		return result;
 	}
-	public final void GetValueFromJson(List<JToken> res)
+	public void GetValueFromJson(List<JToken> res)
 	{
 		for(java.util.List<JToken> item : res)
 		{
@@ -201,18 +201,18 @@ public class Cipher
 			multiPow.add(powers2);
 		}
 	}
-	public final String GetDeliveryForm()
+	public String GetDeliveryForm()
 	{
 		return Convert.ToBase64String(Encoding.UTF8.GetBytes(GetValueToJsonWithPower()));
 	}
-	public final void GetValueFromDeliveryForm(String df)
+	public void GetValueFromDeliveryForm(String df)
 	{
 		String jsonString = Encoding.UTF8.GetString(Convert.FromBase64String(df));
 //C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit typing in Java:
 		var res = JArray.Parse(jsonString);
 		GetValueFromJson((java.util.List<JToken>)res);
-	}
-	public final Cipher GetClone()
+	}*/
+	public Cipher GetClone()
 	{
 		Cipher res = new Cipher();
 		for (int i = 0; i < cipherItems.length; i++)
