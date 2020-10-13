@@ -8,6 +8,8 @@ public class GMap
 	public double[][][] G;
 	public double[] xs, ys;
 	public static double step = 1;
+	public Cipher z11, z12, z22;
+    public double[] zp1, zp2;
 
 	public GMap(int period)
 	{

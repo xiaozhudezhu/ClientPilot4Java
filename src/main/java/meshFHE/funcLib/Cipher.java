@@ -6,7 +6,7 @@ import java.util.List;
 public class Cipher
 {
 	
-	public List<Double>[] cipherItems;
+	public List<Double>[] cipherItems = new ArrayList[4];
 	public List<List<Integer>> multiPow = new ArrayList<List<Integer>>();
 	public List<Integer> maxPower = new ArrayList<Integer>(java.util.Arrays.asList(new Integer[] { 0, 0, 0, 0 }));
 
@@ -15,11 +15,10 @@ public class Cipher
 	}
 	
 	private void initCipherItem() {
-		List<List<Double>> cipherItemList = new ArrayList<List<Double>>();
-		cipherItemList.add(new ArrayList<Double>());
-		cipherItemList.add(new ArrayList<Double>());
-		cipherItemList.add(new ArrayList<Double>());
-		cipherItems = (List<Double>[]) cipherItemList.toArray();
+		cipherItems[0] = new ArrayList<Double>();
+		cipherItems[1] = new ArrayList<Double>();
+		cipherItems[2] = new ArrayList<Double>();
+		cipherItems[3] = new ArrayList<Double>();
 	}
 	
 	public double[] getCipherItem(int index)

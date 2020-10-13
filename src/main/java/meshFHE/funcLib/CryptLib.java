@@ -34,7 +34,7 @@ public class CryptLib
 		cipher.cipherItems[1].add(x0);
 		cipher.cipherItems[2].add(y0);
 		cipher.addMultiPow(key.stage, 0, 1);
-		//cipher.cipherItems[3].Add(0);
+		cipher.cipherItems[3].add(0d);
 		return cipher;
 	}
 	private static ArrayList<Double> Depart(java.util.Random r, double plain, int pn)
@@ -84,6 +84,15 @@ public class CryptLib
 		plain += a1 * LocalFuctionLib.get2BezierY(x1, key.f1) / LocalFuctionLib.get2BezierY(y1, key.f2);
 		return plain; // Math.Round(plain, key.accuracy);
 	}
+	public static double[] EncryptPartList(java.util.Random r, Double z, SSKey key)
+    {
+		double[] result = new double[3];
+        result[0] = 0d;
+        result[1] = (double) r.nextInt(1000);
+        result[2] = (double) r.nextInt(1000);
+        result[0] = z * LocalFuctionLib.get2BezierY(result[1], key.f2) / LocalFuctionLib.get2BezierY(result[1], key.f1);
+        return result;
+    }
 	public static String EncryptPart(java.util.Random r, double z, SSKey key)
 	{
 		double x1 = r.nextInt(1000);

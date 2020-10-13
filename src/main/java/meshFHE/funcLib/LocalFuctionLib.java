@@ -1,9 +1,15 @@
 ﻿package meshFHE.funcLib;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.alibaba.fastjson.JSON;
 
 public class LocalFuctionLib
 {
@@ -67,7 +73,7 @@ public class LocalFuctionLib
 		int c10 = 0;
 		int c20 = 0;
 		int c90 = 0;
-		List<Integer> cList = new ArrayList<Integer>(java.util.Arrays.asList(new Integer[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }));
+		List<Integer> cList = java.util.Arrays.asList(new Integer[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
 		for (double k : kList)
 		{
 			double k2 = Math.abs(k);
@@ -130,7 +136,7 @@ public class LocalFuctionLib
 		{
 			crList.add((double)c / (double)points.size());
 		}
-		List<Double> ycList = new ArrayList<Double>(java.util.Arrays.asList(new Double[] { 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d }));
+		List<Double> ycList = java.util.Arrays.asList(new Double[] { 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d, 0d });
 		double ygap = ymax - ymin;
 		for (double y : yList)
 		{
@@ -228,12 +234,12 @@ public class LocalFuctionLib
 		period = period * (int)times;
 		double x0 = 0;
 		double y0 = baseline;
-		List<Double> point0 = new ArrayList<Double>(java.util.Arrays.asList(new Double[] { x0, y0 }));
+		List<Double> point0 = java.util.Arrays.asList(new Double[] { x0, y0 });
 		List<List<Double>> points = new ArrayList<List<Double>>();
 		points.add(point0);
 		double x1 = 20;
 		double y1 = x1 * k0 + baseline;
-		points.add(new ArrayList<Double>(java.util.Arrays.asList(new Double[] { x1, y1 })));
+		points.add(java.util.Arrays.asList(new Double[] { x1, y1 }));
 		x0 = x1;
 		y0 = y1;
 		for (int i = 0; i < max; i++)
@@ -247,7 +253,7 @@ public class LocalFuctionLib
 				y1 = x0 - x1 > 100 || y0 - y1 > 100 ? y0 + (y0 - y1) * 0.3 : y0 + (y0 - y1) * d;
 				x0 = x1;
 				y0 = y1;
-				points.add(new ArrayList<Double>(java.util.Arrays.asList(new Double[] { x1, y1 })));
+				points.add(java.util.Arrays.asList(new Double[] { x1, y1 }));
 			}
 			else
 			{
@@ -275,14 +281,14 @@ public class LocalFuctionLib
 				if (k1 > 0 && k0 > 0 || k1 < 0 && k0 < 0)
 				{
 					x0 = xtemp + 20;
-					points.add(new ArrayList<Double>(java.util.Arrays.asList(new Double[] { x0, y0 })));
+					points.add(java.util.Arrays.asList(new Double[] { x0, y0 }));
 					k = (points.get(points.size() - 1).get(1) - points.get(points.size() - 2).get(1)) / (points.get(points.size() - 1).get(0) - points.get(points.size() - 2).get(0));
 					kList.add(k);
 					double d = r.nextDouble() + 0.3;
 					x1 = x0 + (x0 - x1) * d;
 					y1 = y0 + (y0 - y1) * d;
 					x0 = x1;
-					points.add(new ArrayList<Double>(java.util.Arrays.asList(new Double[] { x1, y1 })));
+					points.add(java.util.Arrays.asList(new Double[] { x1, y1 }));
 					if (x0 < period)
 					{
 						x0 = period;
@@ -323,7 +329,7 @@ public class LocalFuctionLib
 			{
 				max = i + 3;
 			}
-			points.add(new ArrayList<Double>(java.util.Arrays.asList(new Double[] { x0, y0 })));
+			points.add(java.util.Arrays.asList(new Double[] { x0, y0 }));
 			k = (points.get(points.size() - 1).get(1) - points.get(points.size() - 2).get(1)) / (points.get(points.size() - 1).get(0) - points.get(points.size() - 2).get(0));
 			kList.add(k);
 		}
@@ -439,6 +445,16 @@ public class LocalFuctionLib
 		double res = x + y + 5 >= period ? x + y + 5 - period : x + y + 5;
 		return res;
 	}
+	public static double h4r(double x, double y, int period)
+    {
+        double res = y - x - 4 < 0 ? y - x - 4 + period : y - x - 4;
+        return res;
+    }
+    public static double h5r(double x, double y, int period)
+    {
+        double res = y - x - 5 < 0 ? y - x - 5 + period : y - x - 5;
+        return res;
+    }
 	public static SSKey genKey(java.util.Random r, int period)
 	{
 		int max = 120;
@@ -449,4 +465,94 @@ public class LocalFuctionLib
 		SSKey key = new SSKey(r, period, f1, f2, new GMap(period));
 		return key;
 	}
+	public static void calMapZZ(java.util.Random r, SSKey key, GMap map)
+    {
+        // 在生成完私钥和字典加载后执行
+        map.z11 = CryptLib.Encrypt(r, key.zi.get(0) * key.zi.get(0), key);
+        map.z12 = CryptLib.Encrypt(r, key.zi.get(0) * key.zi.get(1), key);
+        map.z22 = CryptLib.Encrypt(r, key.zi.get(1) * key.zi.get(1), key);
+    }
+    public static void calKeyZP(java.util.Random r, SSKey key, GMap map)
+    {
+        map.zp1 = CryptLib.EncryptPartList(r, key.zi.get(0), key);
+        map.zp2 = CryptLib.EncryptPartList(r, key.zi.get(1), key);
+    }
+    
+    public static SSKey loadKey(String fileName) throws IOException {
+        File f = new File(fileName);
+    	FileInputStream fs = new FileInputStream(f);
+    	byte[] b = new byte[(int) f.length()];
+        fs.read(b);
+        fs.close();
+        String str = new String(b);
+        SSKey key = JSON.parseObject(str, SSKey.class);
+        return key;
+    }
+    
+    public static GMap loadG(String fileName, int period) throws IOException
+    {
+        GMap g = new GMap(period);
+        for (int i = 0; i < 6; i++)
+        {
+            FileInputStream fs = new FileInputStream(fileName + "_" + i + ".gmd");
+            for (int j = 0; j < period / GMap.step; j++)
+            {
+                if (i == 0)
+                {
+                    g.G[j] = new double[(int)(period / GMap.step)][];
+                }
+                for (int k = 0; k < period / GMap.step; k++)
+                {
+                    if (i == 0)
+                    {
+                        g.G[j][k] = new double[24];
+                    }
+                    byte[] gs1 = new byte[8];
+                    byte[] gs2 = new byte[8];
+                    byte[] gs3 = new byte[8];
+                    byte[] gs4 = new byte[8];
+                    fs.read(gs1, 0, 8);
+                    fs.read(gs2, 0, 8);
+                    fs.read(gs3, 0, 8);
+                    fs.read(gs4, 0, 8);
+                    double gv1 = bytes2Double(gs1);
+                    double gv2 = bytes2Double(gs2);
+                    double gv3 = bytes2Double(gs3);
+                    double gv4 = bytes2Double(gs4);
+                    g.G[j][k][i * 4] = gv1;
+                    g.G[j][k][i * 4 + 1] = gv2;
+                    g.G[j][k][i * 4 + 2] = gv3;
+                    g.G[j][k][i * 4 + 3] = gv4;
+                }
+            }
+            fs.close();
+        }
+        FileInputStream fs2 = new FileInputStream(fileName + "_6.gmd");
+        for (int i = 0; i < period / GMap.step; i++)
+        {
+            byte[] xib = new byte[8];
+            fs2.read(xib, 0, 8);
+            g.xs[i] = bytes2Double(xib);
+        }
+        fs2.close();
+        fs2 = new FileInputStream(fileName + "_7.gmd");
+        for (int i = 0; i < period / GMap.step; i++)
+        {
+            byte[] yib = new byte[8];
+            fs2.read(yib, 0, 8);
+            g.ys[i] = bytes2Double(yib);
+        }
+        fs2.close();
+        return g;
+    }
+    
+    public static double bytes2Double(byte[] arr) {
+		long value = 0;
+		for (int i = 0; i < 8; i++) {
+			value |= ((long) (arr[i] & 0xff)) << (8 * i);
+		}
+		return Double.longBitsToDouble(value);
+    }
+    
+    
 }

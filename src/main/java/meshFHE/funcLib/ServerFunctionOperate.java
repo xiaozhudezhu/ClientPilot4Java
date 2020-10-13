@@ -156,6 +156,26 @@ public class ServerFunctionOperate
 		c[2] = u2;
 		return c;
 	}
+	
+	public static double[] GetFunctionSplitResult(double[] c1, double[] c2, GMap G, int period)
+    {
+        double[] c = new double[] { 0, 0, 0 };
+        double a1 = c1[0];
+        double x1 = c1[1];
+        double y1 = c1[2];
+        double a2 = c2[0];
+        double x2 = c2[1];
+        double y2 = c2[2];
+        double u1 = LocalFuctionLib.h4r(x2, x1, period);
+        double u2 = LocalFuctionLib.h5r(y2, y1, period);
+        //double a3 = a1 * a2 * G[4][x1][x2][0] / G[5][y1][y2][0];
+        double a3 = a1 / a2 * GetCurveValueOpt(u2, y2, G, period).get(5) / GetCurveValueOpt(u1, x2, G, period).get(4);
+        c[0] = a3;
+        c[1] = u1;
+        c[2] = u2;
+        return c;
+    }
+	
 	public static double[] GetFunctionMultiplyResult(double[] c1, double p1)
 	{
 		c1[0] = c1[0] * p1;
@@ -194,6 +214,48 @@ public class ServerFunctionOperate
 		res.maxPower = addCMP(c1.maxPower, c2.maxPower);
 		res.Sort();
 		res = MergeSameMP(res, G, period);
+		// 降次
+        double[] cp11 = res.getCipherItem(4);
+        double[] cp12 = res.getCipherItem(3);
+        double[] cp22 = res.getCipherItem(2);
+        double[] zc11_1 = G.z11.getCipherItem(2);
+        double[] zc11_2 = G.z11.getCipherItem(1);
+        double[] zc12_1 = G.z12.getCipherItem(2);
+        double[] zc12_2 = G.z12.getCipherItem(1);
+        double[] zc22_1 = G.z22.getCipherItem(2);
+        double[] zc22_2 = G.z22.getCipherItem(1);
+        Cipher rcp1 = new Cipher();
+        rcp1.addCipherItem(new double[] { 0, 0, 0 });
+        rcp1.addCipherItem(GetFunctionMultiplyResult(cp11, zc11_2, G, period));
+        rcp1.addCipherItem(GetFunctionMultiplyResult(cp11, zc11_1, G, period));
+        rcp1.maxPower.set(0, 1);
+        rcp1.maxPower.set(1, 1);
+        rcp1.multiPow.add(java.util.Arrays.asList(new Integer[] { 0, 0 }));
+        rcp1.multiPow.add(java.util.Arrays.asList(new Integer[] { 0, 1 }));
+        rcp1.multiPow.add(java.util.Arrays.asList(new Integer[] { 1, 0 }));
+        Cipher rcp2 = new Cipher();
+        rcp2.addCipherItem(new double[] { 0, 0, 0 });
+        rcp2.addCipherItem(GetFunctionMultiplyResult(cp12, zc12_2, G, period));
+        rcp2.addCipherItem(GetFunctionMultiplyResult(cp12, zc12_1, G, period));
+        rcp2.maxPower.set(0, 1);
+        rcp2.maxPower.set(1, 1);
+        rcp2.multiPow.add(java.util.Arrays.asList(new Integer[] { 0, 0 }));
+        rcp2.multiPow.add(java.util.Arrays.asList(new Integer[] { 0, 1 }));
+        rcp2.multiPow.add(java.util.Arrays.asList(new Integer[] { 1, 0 }));
+        Cipher rcp3 = new Cipher();
+        rcp3.addCipherItem(new double[] { 0, 0, 0 });
+        rcp3.addCipherItem(GetFunctionMultiplyResult(cp22, zc22_2, G, period));
+        rcp3.addCipherItem(GetFunctionMultiplyResult(cp22, zc22_1, G, period));
+        rcp3.maxPower.set(0, 1);
+        rcp3.maxPower.set(1, 1);
+        rcp3.multiPow.add(java.util.Arrays.asList(new Integer[] { 0, 0 }));
+        rcp3.multiPow.add(java.util.Arrays.asList(new Integer[] { 0, 1 }));
+        rcp3.multiPow.add(java.util.Arrays.asList(new Integer[] { 1, 0 }));
+        Cipher res0 = new Cipher();
+        res0.maxPower.set(0, 1);
+        res0.maxPower.set(1, 1);
+        res0 = GetCipherAddResult(1, 1, rcp1, rcp2, G, period);
+        res = GetCipherAddResult(1, 1, res0, rcp3, G, period);
 		return res;
 	}
 	public static Cipher GetCipherMultiplyResult(Cipher c1, double p1, GMap G, int period)
@@ -238,4 +300,29 @@ public class ServerFunctionOperate
 	}
 //C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 		///#endregion
+	// 密文转换
+    public static Cipher Transfer(Cipher c, GMap G1, GMap G2, int period)
+    {
+        Cipher result = new Cipher();
+        double[] c1 = c.getCipherItem(2);
+        double[] c2 = c.getCipherItem(1);
+        double[] z1 = G1.zp1;
+        double[] z2 = G1.zp2;
+        double[] z3 = G2.zp1;
+        double[] z4 = G2.zp2;
+        double[] c1z1 = GetFunctionMultiplyResult(c1, z1, G1, period);
+        double[] c1z3 = GetFunctionSplitResult(c1z1, z3, G2, period);
+        double[] c2z2 = GetFunctionMultiplyResult(c2, z2, G1, period);
+        double[] c2z4 = GetFunctionSplitResult(c2z2, z4, G2, period);
+        result.addCipherItem(new double[] { 0, 0, 0 });
+        result.addCipherItem(c2z4);
+        result.addCipherItem(c1z3);
+        result.maxPower.set(0, 1);
+        result.maxPower.set(1, 1);
+        result.multiPow.add(java.util.Arrays.asList(new Integer[] { 0, 0 }));
+        result.multiPow.add(java.util.Arrays.asList(new Integer[] { 0, 1 }));
+        result.multiPow.add(java.util.Arrays.asList(new Integer[] { 1, 0 }));
+        return result;
+    }
+    
 }

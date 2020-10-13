@@ -11,6 +11,10 @@ public class SSKey
 	public int stage, period;
 	public GMap G;
 	public int accuracy = 0;
+	
+	public SSKey() {
+		
+	}
 
 	public SSKey(java.util.Random r, int period, List<List<Double>> f1, List<List<Double>> f2, GMap G)
 	{
@@ -24,7 +28,7 @@ public class SSKey
 			zi.add(r.nextInt(100) + r.nextDouble());
 		}
 	}
-	public SSKey(java.util.Random r, int period, List<List<Double>> f1, List<List<Double>> f2, GMap G, List<Double> zi)
+	public SSKey(int period, List<List<Double>> f1, List<List<Double>> f2, GMap G, List<Double> zi)
 	{
 		stage = 2;
 		this.period = period;
