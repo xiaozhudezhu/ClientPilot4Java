@@ -6,6 +6,11 @@ import java.util.Random;
 import meshFHE.funcLib.*;
 
 public class Test {
+	
+	static String x0 = "92";
+    static String x1 = "93";
+    static String y0 = "89";
+    static String y1 = "90";
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
@@ -19,12 +24,15 @@ public class Test {
 		System.out.println(key);
 		LocalFuctionLib.calKeyZP(new Random(), key, g);
 		LocalFuctionLib.calMapZZ(new Random(), key, g);
-		double d1 = 12.3;
+		double d1 = 12;
 		double d2 = 5;
 		Cipher cipher1 = CryptLib.Encrypt(new Random(), d1, key);
 		Cipher cipher2 = CryptLib.Encrypt(new Random(), d2, key);
-		Cipher cipher3 = ServerFunctionOperate.GetCipherMultiplyResult(cipher1, cipher2, g, period);
+		Cipher cipher3 = ServerFunctionOperate.GetCipherAddResult(1, 1, cipher1, cipher2, g, period);
 		double result = CryptLib.Decrypt(cipher3, key);
+		System.out.println(result);
+		String r = ServerFunctionOperate.Compare(cipher1, x0, x1, y0, y1, g, period);
+		result = CryptLib.Decrypt(cipher3, key);
 		System.out.println(result);
 
 	}
