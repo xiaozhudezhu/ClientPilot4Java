@@ -24,17 +24,25 @@ public class Test {
 		System.out.println(key);
 		LocalFuctionLib.calKeyZP(new Random(), key, g);
 		LocalFuctionLib.calMapZZ(new Random(), key, g);
-		double d1 = 12;
-		double d2 = 5;
-		Cipher cipher1 = CryptLib.Encrypt(new Random(), d1, key);
-		Cipher cipher2 = CryptLib.Encrypt(new Random(), d2, key);
-		Cipher cipher3 = ServerFunctionOperate.GetCipherAddResult(1, 1, cipher1, cipher2, g, period);
-		double result = CryptLib.Decrypt(cipher3, key);
-		System.out.println(result);
-		String r = ServerFunctionOperate.Compare(cipher1, x0, x1, y0, y1, g, period);
-		result = CryptLib.Decrypt(cipher3, key);
-		System.out.println(result);
-
+		for(int i = 0; i < 100; i ++) {
+			double d1 = new Random().nextInt(100);
+			double d2 = new Random().nextInt(100);
+			System.out.println("d1,d2:" + d1 + "," + d2);
+			Cipher cipher1 = CryptLib.Encrypt(new Random(), d1, key);
+			Cipher cipher2 = CryptLib.Encrypt(new Random(), d2, key);
+			Cipher cipher3 = IntHE.add(cipher1, cipher2, g);
+			double result = CryptLib.Decrypt(cipher3, key);
+			System.out.println("add:" + result);
+			cipher3 = IntHE.substract(cipher1, cipher2, g);
+			result = CryptLib.Decrypt(cipher3, key);
+			System.out.println("substract:" + result);
+			cipher3 = IntHE.multiply(cipher1, cipher2, g);
+			result = CryptLib.Decrypt(cipher3, key);
+			System.out.println("multiply:" + result);
+			String r = IntHE.compare(cipher1, cipher2, g);
+			System.out.println("compare:" + r);
+		}
+		
 	}
 	
 }
