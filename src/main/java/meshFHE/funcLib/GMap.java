@@ -10,6 +10,10 @@ public class GMap
 	public static double step = 1;
 	public Cipher z11, z12, z22;
     public double[] zp1, zp2;
+    
+    public GMap() {
+    	
+    }
 
 	public GMap(int period)
 	{

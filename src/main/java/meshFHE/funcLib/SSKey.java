@@ -9,32 +9,29 @@ public class SSKey
 	public List<List<Double>> f1, f2;
 	public List<Double> zi = new ArrayList<Double>();
 	public int stage, period;
-	public GMap G;
 	public int accuracy = 0;
 	
 	public SSKey() {
 		
 	}
 
-	public SSKey(java.util.Random r, int period, List<List<Double>> f1, List<List<Double>> f2, GMap G)
+	public SSKey(java.util.Random r, int period, List<List<Double>> f1, List<List<Double>> f2)
 	{
 		stage = 2;
 		this.period = period;
 		this.f1 = f1;
 		this.f2 = f2;
-		this.G = G;
 		for (int i = 0; i < stage; i++)
 		{
 			zi.add(r.nextInt(100) + r.nextDouble());
 		}
 	}
-	public SSKey(int period, List<List<Double>> f1, List<List<Double>> f2, GMap G, List<Double> zi)
+	public SSKey(int period, List<List<Double>> f1, List<List<Double>> f2, List<Double> zi)
 	{
 		stage = 2;
 		this.period = period;
 		this.f1 = f1;
 		this.f2 = f2;
-		this.G = G;
 		this.zi = zi;
 	}
 	public final void RegenZ(java.util.Random r)

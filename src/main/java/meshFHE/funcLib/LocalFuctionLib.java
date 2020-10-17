@@ -3,11 +3,13 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.alibaba.fastjson.JSON;
 
@@ -455,15 +457,45 @@ public class LocalFuctionLib
         double res = y - x - 5 < 0 ? y - x - 5 + period : y - x - 5;
         return res;
     }
-	public static SSKey genKey(java.util.Random r, int period)
+	public static SSKey genKey(java.util.Random r, int period, SSKey defaultKey, String fileName) throws IOException
 	{
+		File f = new File(fileName);
+		if(f.exists())
+			return null;
 		int max = 120;
 		int time = 1;
 		double time1 = 1;
-		List<List<Double>> f1 = LocalFuctionLib.genFPoints(r, max, period * time, 300, 0.1, 1 / (double)time, 1 / (double)time);
-		List<List<Double>> f2 = LocalFuctionLib.genFPoints(r, max, period * time, 300, -0.1, 1 / (double)time1, 1 / (double)time);
-		SSKey key = new SSKey(r, period, f1, f2, new GMap(period));
+		SSKey key = null;
+		if(defaultKey != null) {
+			key = new SSKey(r, period, defaultKey.f1, defaultKey.f2);
+		}
+		else {
+			List<List<Double>> f1 = LocalFuctionLib.genFPoints(r, max, period * time, 300, 0.1, 1 / (double)time, 1 / (double)time);
+			List<List<Double>> f2 = LocalFuctionLib.genFPoints(r, max, period * time, 300, -0.1, 1 / (double)time1, 1 / (double)time);
+			key = new SSKey(r, period, f1, f2);
+		}
+        String keyStr = JSON.toJSONString(key);
+        f.createNewFile();
+    	FileOutputStream fs = new FileOutputStream(f);
+    	byte[] b = keyStr.getBytes();
+        fs.write(b);
+        fs.close();
 		return key;
+	}
+	public static GMap genGMap(java.util.Random r, int period, SSKey key, String fileName) throws IOException {
+		File f = new File(fileName);
+		if(f.exists())
+			return null;
+		GMap g = new GMap();
+		LocalFuctionLib.calKeyZP(r, key, g);
+		LocalFuctionLib.calMapZZ(r, key, g);
+		String gStr = JSON.toJSONString(g);
+        f.createNewFile();
+    	FileOutputStream fs = new FileOutputStream(f);
+    	byte[] b = gStr.getBytes();
+        fs.write(b);
+        fs.close();
+		return g;
 	}
 	public static void calMapZZ(java.util.Random r, SSKey key, GMap map)
     {
@@ -487,6 +519,17 @@ public class LocalFuctionLib
         String str = new String(b);
         SSKey key = JSON.parseObject(str, SSKey.class);
         return key;
+    }
+    
+    public static GMap loadGMap(String fileName) throws IOException {
+        File f = new File(fileName);
+    	FileInputStream fs = new FileInputStream(f);
+    	byte[] b = new byte[(int) f.length()];
+        fs.read(b);
+        fs.close();
+        String str = new String(b);
+        GMap map = JSON.parseObject(str, GMap.class);
+        return map;
     }
     
     public static GMap loadG(String fileName, int period) throws IOException
