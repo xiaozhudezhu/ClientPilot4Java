@@ -7,8 +7,7 @@ import java.util.List;
 
 public class ServerFunctionOperate
 {
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#region G的动态局部拟合
+	///#region G的动态局部拟合
 	public static List<Double> GetCurveValueOpt(double x, double y, GMap G, int period)
 	{
 		List<Double> result = new ArrayList<Double>();
@@ -19,10 +18,8 @@ public class ServerFunctionOperate
 		}
 		return result;
 	}
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#endregion
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#region 基本操作
+	///#endregion
+	///#region 基本操作
 	private static List<Integer> addCMP(List<Integer> cmp1, List<Integer> cmp2)
 	{
 		List<Integer> res = new ArrayList<Integer>();
@@ -65,10 +62,8 @@ public class ServerFunctionOperate
 		res.cipherItems[3].add(c.cipherItems[3].get(0));
 		return res;
 	}
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#endregion
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#region 同态加法
+	///#endregion
+	///#region 同态加法
 	//使用固定拟合策略
 	public static double[] GetFunctionAddResult(double p1, double p2, double[] c1, double[] c2, GMap G, int period)
 	{
@@ -133,10 +128,8 @@ public class ServerFunctionOperate
 		}
 		return c;
 	}
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#endregion
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#region 同态乘法
+	///#endregion
+	///#region 同态乘法
 	//使用固定拟合策略
 	public static double[] GetFunctionMultiplyResult(double[] c1, double[] c2, GMap G, int period)
 	{
@@ -266,10 +259,8 @@ public class ServerFunctionOperate
 		res.cipherItems[0].set(2, res.cipherItems[0].get(2) * p1);
 		return res;
 	}
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#endregion
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#region 同态比较
+	///#endregion
+	///#region 同态比较
 	public static String Compare(Cipher c, String x0, String x1, String y0, String y1, GMap G, int period)
 	{
 		String result = "none";
@@ -298,8 +289,7 @@ public class ServerFunctionOperate
 		}
 		return result;
 	}
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#endregion
+	///#endregion
 	// 密文转换
     public static Cipher Transfer(Cipher c, GMap G1, GMap G2, int period)
     {

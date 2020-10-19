@@ -97,8 +97,7 @@ public class GMap
 		}
 		return part;
 	}
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#region G的动态局部拟合
+	///#region G的动态局部拟合
 	private double[] getG(double x, double y, int index)
 	{
 		double[] gs = new double[] { 0, 0, 0, 0 };
@@ -110,7 +109,7 @@ public class GMap
 		}
 		return gs;
 	}
-	private double[] getG(double x, double y, int index, int period)
+	/*private double[] getG(double x, double y, int index, int period)
 	{
 		double[] gs = new double[] { 0, 0, 0, 0 };
 		x = getXInPeriod(x, period);
@@ -122,7 +121,7 @@ public class GMap
 			gs[i] = G[xi][yi][index * 4 + i];
 		}
 		return gs;
-	}
+	}*/
 	private double getXInPeriod(double x, int period)
 	{
 		while (true)
@@ -779,6 +778,5 @@ public class GMap
 		}
 		return y;
 	}
-//C# TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-		///#endregion
+	///#endregion
 }

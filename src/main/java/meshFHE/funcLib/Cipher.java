@@ -207,7 +207,6 @@ public class Cipher
 	public void GetValueFromDeliveryForm(String df)
 	{
 		String jsonString = Encoding.UTF8.GetString(Convert.FromBase64String(df));
-//C# TO JAVA CONVERTER TODO TASK: There is no equivalent to implicit typing in Java:
 		var res = JArray.Parse(jsonString);
 		GetValueFromJson((java.util.List<JToken>)res);
 	}*/

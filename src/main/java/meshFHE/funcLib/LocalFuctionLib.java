@@ -1,15 +1,15 @@
 ﻿package meshFHE.funcLib;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.alibaba.fastjson.JSON;
 
@@ -130,9 +130,9 @@ public class LocalFuctionLib
 		}
 		kdev = Math.sqrt(kdev) / kList.size();
 		kdev2 = Math.sqrt(kdev2) / kList.size();
-		double r10 = (double)c10 / (double)kList.size();
-		double r20 = (double)(c10 + c20) / (double)kList.size();
-		double r90 = (double)c90 / (double)kList.size();
+		//double r10 = (double)c10 / (double)kList.size();
+		//double r20 = (double)(c10 + c20) / (double)kList.size();
+		//double r90 = (double)c90 / (double)kList.size();
 		ArrayList<Double> crList = new ArrayList<Double>();
 		for (int c : cList)
 		{
@@ -399,7 +399,6 @@ public class LocalFuctionLib
 		{
 			throw new RuntimeException("negative delta");
 		}
-//C# TO JAVA CONVERTER TODO TASK: Math.Round can only be converted to Java's Math.round if just one argument is used:
 		if(Double.isNaN(y) || Double.isInfinite(y)) {
 			return 0d;
 		}
@@ -508,6 +507,18 @@ public class LocalFuctionLib
     {
         map.zp1 = CryptLib.EncryptPartList(r, key.zi.get(0), key);
         map.zp2 = CryptLib.EncryptPartList(r, key.zi.get(1), key);
+    }
+    
+    public static SSKey loadKey(InputStream is) throws IOException {
+	    ByteArrayOutputStream result = new ByteArrayOutputStream();
+	    byte[] buffer = new byte[1024];
+	    int length;
+	    while ((length = is.read(buffer)) != -1) {
+	    	result.write(buffer, 0, length);
+	    }
+        String str = result.toString();
+        SSKey key = JSON.parseObject(str, SSKey.class);
+        return key;
     }
     
     public static SSKey loadKey(String fileName) throws IOException {

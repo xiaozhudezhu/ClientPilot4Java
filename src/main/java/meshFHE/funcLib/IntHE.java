@@ -3,6 +3,7 @@ package meshFHE.funcLib;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Random;
 
 public class IntHE {
@@ -16,17 +17,29 @@ public class IntHE {
     
     private static GMap g;
     
-    private static String DEFAULT_KEY_FILE = "F:/Career/Groups/Own/Projects/sf/shaftstop_key.txt";
+    //private static String DEFAULT_KEY_FILE = "F:/Career/Groups/Own/Projects/sf/shaftstop_key.txt";
 
     private static String DEFAULT_GMAP_FILE = "D:/BaiduNetdiskDownload/GFDF/DF635683432243530954";
     
-    private static String KEY_DIR = "D:/test/key";
-    private static String GMAP_DIR = "D:/test/gmap";
+    private static String KEY_DIR = getPath() + "/shaftstop/key";
+    private static String GMAP_DIR = getPath() + "/shaftstop/gmap";
     
     private static Map<String, SSKey> keyCache = new MaxSizeHashMap<String, SSKey>(100);
     private static Map<String, GMap> gCache = new MaxSizeHashMap<String, GMap>(100);
 
 	static {
+		Properties properties = new Properties();
+		try {
+			properties.load(IntHE.class.getResourceAsStream("/shaftstop.properties"));
+			String keyDir = properties.getProperty("KEY_DIR");
+			String gmapDir = properties.getProperty("GMAP_DIR");
+			if(keyDir != null && !keyDir.equals(""))
+				KEY_DIR = properties.getProperty("KEY_DIR");
+			if(gmapDir != null && !gmapDir.equals(""))
+				GMAP_DIR = properties.getProperty("GMAP_DIR");
+		} catch (IOException e) {
+			System.out.println("WARN：配置文件不存在，将使用默认配置文件");
+		}
 		File keyDir = new File(KEY_DIR);
 		if(!keyDir.exists())
 			keyDir.mkdirs();
@@ -36,7 +49,7 @@ public class IntHE {
 		try {
 			g = LocalFuctionLib.loadG(DEFAULT_GMAP_FILE, period);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("ERROR：运算字典不存在！");
 			e.printStackTrace();
 		}
 	}
@@ -48,7 +61,7 @@ public class IntHE {
 	 * @throws IOException 私钥文件生成失败
 	 */
     public static SSKey genKey(String uid) throws IOException {
-		SSKey defaultKey = LocalFuctionLib.loadKey(DEFAULT_KEY_FILE);
+		SSKey defaultKey = LocalFuctionLib.loadKey(IntHE.class.getResourceAsStream("/shaftstop_key"));
 		String fileName = KEY_DIR + File.separator + uid;
 		return LocalFuctionLib.genKey(new Random(), period, defaultKey, fileName);
 	}
@@ -322,6 +335,22 @@ public class IntHE {
 			throw new Exception("map not exists");
 		}
 		return transfer(c, g1, g2);
+	}
+	
+	
+	private static String getPath()
+	{
+		String path = IntHE.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		if(System.getProperty("os.name").contains("dows"))
+		{
+			path = path.substring(1,path.length());
+		}
+		if(path.contains("jar"))
+		{
+			path = path.substring(0,path.lastIndexOf("."));
+			return path.substring(0,path.lastIndexOf("/"));
+		}
+		return path.replace("target/classes/", "");
 	}
 
 }

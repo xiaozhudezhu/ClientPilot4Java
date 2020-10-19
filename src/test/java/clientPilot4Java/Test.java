@@ -45,15 +45,15 @@ public class Test {
 			System.out.println("compare:" + r);
 		}*/
 		
-		/*String uid = UUID.randomUUID().toString();
+		String uid = UUID.randomUUID().toString();
 
 		SSKey key1 = IntHE.genKey(uid);
 		SSKey key2 = IntHE.getKey(uid);
 
 		GMap gmap1 = IntHE.genGMap(key1, uid);
-		GMap gmap2 = IntHE.getGMap(uid);*/
+		GMap gmap2 = IntHE.getGMap(uid);
 		
-		String uid = "3f1a57a8-9978-4d38-aa29-946f2e3014d0";
+		/*String uid = "3f1a57a8-9978-4d38-aa29-946f2e3014d0";
 		String uid2 = "38fe9608-66d3-45f4-a7ef-ebf8e71158ba";
 		for(int i = 0; i < 100; i ++) {
 			double d1 = new Random().nextInt(100);
@@ -77,7 +77,7 @@ public class Test {
 			result = IntHE.decrypt(cipher4, uid2);
 			System.out.println("transfer:" + result);
 
-		}
+		}*/
 		System.out.println("");
 		
 	}

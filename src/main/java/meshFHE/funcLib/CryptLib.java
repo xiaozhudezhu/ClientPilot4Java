@@ -65,7 +65,6 @@ public class CryptLib
 			plain += ai * LocalFuctionLib.get2BezierY(xi, key.f1) / LocalFuctionLib.get2BezierY(yi, key.f2) * z;
 		}
 		//plain += cipher.cipherItems[3][0];
-//C# TO JAVA CONVERTER TODO TASK: Math.Round can only be converted to Java's Math.round if just one argument is used:
 		BigDecimal bg = new BigDecimal(plain).setScale(key.accuracy, RoundingMode.UP);
 		return bg.doubleValue();
 	}
@@ -74,7 +73,6 @@ public class CryptLib
 		double plain = 0;
 		plain += a1 * LocalFuctionLib.get2BezierY(x1, key.f1) / LocalFuctionLib.get2BezierY(y1, key.f2) * key.zi.get(1);
 		plain += a2 * LocalFuctionLib.get2BezierY(x2, key.f1) / LocalFuctionLib.get2BezierY(y2, key.f2) * key.zi.get(0);
-//C# TO JAVA CONVERTER TODO TASK: Math.Round can only be converted to Java's Math.round if just one argument is used:
 		BigDecimal bg = new BigDecimal(plain).setScale(key.accuracy, RoundingMode.UP);
 		return bg.doubleValue();
 	}
