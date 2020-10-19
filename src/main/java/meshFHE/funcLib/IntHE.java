@@ -17,9 +17,7 @@ public class IntHE {
     
     private static GMap g;
     
-    //private static String DEFAULT_KEY_FILE = "F:/Career/Groups/Own/Projects/sf/shaftstop_key.txt";
-
-    private static String DEFAULT_GMAP_FILE = "D:/BaiduNetdiskDownload/GFDF/DF635683432243530954";
+    private static String DEFAULT_GMAP_FILE = "";
     
     private static String KEY_DIR = getPath() + "/shaftstop/key";
     private static String GMAP_DIR = getPath() + "/shaftstop/gmap";
@@ -33,10 +31,15 @@ public class IntHE {
 			properties.load(IntHE.class.getResourceAsStream("/shaftstop.properties"));
 			String keyDir = properties.getProperty("KEY_DIR");
 			String gmapDir = properties.getProperty("GMAP_DIR");
+			String defaultGMapFile = properties.getProperty("DEFAULT_GMAP_FILE");
 			if(keyDir != null && !keyDir.equals(""))
-				KEY_DIR = properties.getProperty("KEY_DIR");
+				KEY_DIR = keyDir;
 			if(gmapDir != null && !gmapDir.equals(""))
-				GMAP_DIR = properties.getProperty("GMAP_DIR");
+				GMAP_DIR = gmapDir;
+			if(defaultGMapFile != null && !defaultGMapFile.equals(""))
+				DEFAULT_GMAP_FILE = defaultGMapFile;
+			else
+				System.out.println("ERROR：运算字典文件未配置！");
 		} catch (IOException e) {
 			System.out.println("WARN：配置文件不存在，将使用默认配置文件");
 		}
