@@ -1,7 +1,9 @@
 package meshFHE.funcLib;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -59,10 +61,10 @@ public class IntHE {
 		long time1 = System.currentTimeMillis();
 		System.out.println("INFO：开始加载运算字典，请稍候..");
 		try {
-			g = LocalFuctionLib.loadG(DEFAULT_GMAP_FILE, period);
+			g = LocalFuctionLib.loadG2(DEFAULT_GMAP_FILE);
 			long time2 = System.currentTimeMillis();
 			System.out.println("INFO：运算字典加载完成，耗时：" + (time2 - time1)/1000 + "秒");
-		} catch (IOException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			System.out.println("ERROR：运算字典不存在！");
 			e.printStackTrace();
 		}

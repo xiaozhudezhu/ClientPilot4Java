@@ -65,7 +65,7 @@ public class CryptLib
 			plain += ai * LocalFuctionLib.get2BezierY(xi, key.f1) / LocalFuctionLib.get2BezierY(yi, key.f2) * z;
 		}
 		//plain += cipher.cipherItems[3][0];
-		BigDecimal bg = new BigDecimal(plain).setScale(key.accuracy, RoundingMode.UP);
+		BigDecimal bg = new BigDecimal(plain).setScale(key.accuracy, RoundingMode.HALF_UP);
 		return bg.doubleValue();
 	}
 	public static double DecryptNoPower(double a1, double x1, double y1, double a2, double x2, double y2, SSKey key)
@@ -73,7 +73,7 @@ public class CryptLib
 		double plain = 0;
 		plain += a1 * LocalFuctionLib.get2BezierY(x1, key.f1) / LocalFuctionLib.get2BezierY(y1, key.f2) * key.zi.get(1);
 		plain += a2 * LocalFuctionLib.get2BezierY(x2, key.f1) / LocalFuctionLib.get2BezierY(y2, key.f2) * key.zi.get(0);
-		BigDecimal bg = new BigDecimal(plain).setScale(key.accuracy, RoundingMode.UP);
+		BigDecimal bg = new BigDecimal(plain).setScale(key.accuracy, RoundingMode.HALF_UP);
 		return bg.doubleValue();
 	}
 	public static double DecryptPart(double a1, double x1, double y1, SSKey key)

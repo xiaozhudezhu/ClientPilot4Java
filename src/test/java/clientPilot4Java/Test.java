@@ -47,37 +47,51 @@ public class Test {
 		
 		String uid = UUID.randomUUID().toString();
 
-		SSKey key1 = IntHE.genKey(uid);
-		SSKey key2 = IntHE.getKey(uid);
+		SSKey key11 = IntHE.genKey(uid);
+		SSKey key12 = IntHE.getKey(uid);
 
-		GMap gmap1 = IntHE.genGMap(key1, uid);
-		GMap gmap2 = IntHE.getGMap(uid);
+		GMap gmap11 = IntHE.genGMap(key11, uid);
+		GMap gmap12 = IntHE.getGMap(uid);
 		
-		/*String uid = "3f1a57a8-9978-4d38-aa29-946f2e3014d0";
-		String uid2 = "38fe9608-66d3-45f4-a7ef-ebf8e71158ba";
+		String uid2 = UUID.randomUUID().toString();
+		SSKey key21 = IntHE.genKey(uid2);
+		SSKey key22 = IntHE.getKey(uid2);
+
+		GMap gmap21 = IntHE.genGMap(key21, uid2);
+		GMap gmap22 = IntHE.getGMap(uid2);
+		
+		//String uid = "3f1a57a8-9978-4d38-aa29-946f2e3014d0";
+		//String uid2 = "38fe9608-66d3-45f4-a7ef-ebf8e71158ba";
 		for(int i = 0; i < 100; i ++) {
 			double d1 = new Random().nextInt(100);
 			double d2 = new Random().nextInt(100);
+			//double d1 = 66;
+			//double d2 = 88;
 			System.out.println("d1,d2:" + d1 + "," + d2);
 			Cipher cipher1 = IntHE.encrypt(d1, uid);
 			Cipher cipher2 = IntHE.encrypt(d2, uid);
 			Cipher cipher3 = IntHE.add(cipher1, cipher2, uid);
 			double result = IntHE.decrypt(cipher3, uid);
-			System.out.println("add:" + result);
+			if((d1 + d2) != result)
+				System.out.println("add:" + result);
 			cipher3 = IntHE.substract(cipher1, cipher2, uid);
 			result = IntHE.decrypt(cipher3, uid);
-			System.out.println("substract:" + result);
+			if((d1 - d2) != result)
+				System.out.println("substract:" + result);
 			cipher3 = IntHE.multiply(cipher1, cipher2, uid);
 			result = IntHE.decrypt(cipher3, uid);
-			System.out.println("multiply:" + result);
+			if((d1 * d2) != result)
+				System.out.println("multiply:" + result);
 			String r = IntHE.compare(cipher1, cipher2, uid);
-			System.out.println("compare:" + r);
+			if(!(((d1 > d2) && r.equals("true")) || ((d1 == d2) && r.equals("none")) 
+					|| ((d1 < d2) && r.equals("false"))))
+				System.out.println("compare:" + r);
 			
-			Cipher cipher4 = IntHE.transfer(cipher3, uid, uid2);
+			Cipher cipher4 = IntHE.transfer(cipher1, uid, uid2);
 			result = IntHE.decrypt(cipher4, uid2);
 			System.out.println("transfer:" + result);
 
-		}*/
+		}
 		System.out.println("");
 		
 	}

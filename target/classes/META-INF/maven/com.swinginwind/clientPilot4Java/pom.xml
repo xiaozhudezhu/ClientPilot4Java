@@ -27,6 +27,12 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<sourceFileIncludes>
+						<include>IntHE.java</include>
+					</sourceFileIncludes>
+					<sourcepath>${basedir}/src/main/java/meshFHE/funcLib</sourcepath>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

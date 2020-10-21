@@ -1,10 +1,16 @@
 package meshFHE.funcLib;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GMap
+public class GMap implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	public double[][][] G;
 	public double[] xs, ys;
 	public static double step = 1;

@@ -162,7 +162,7 @@ public class ServerFunctionOperate
         double u1 = LocalFuctionLib.h4r(x2, x1, period);
         double u2 = LocalFuctionLib.h5r(y2, y1, period);
         //double a3 = a1 * a2 * G[4][x1][x2][0] / G[5][y1][y2][0];
-        double a3 = a1 / a2 * GetCurveValueOpt(u2, y2, G, period).get(5) / GetCurveValueOpt(u1, x2, G, period).get(4);
+        double a3 = (a1 / a2) * (GetCurveValueOpt(u2, y2, G, period).get(5) / GetCurveValueOpt(u1, x2, G, period).get(4));
         c[0] = a3;
         c[1] = u1;
         c[2] = u2;

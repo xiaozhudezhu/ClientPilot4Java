@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -402,7 +403,7 @@ public class LocalFuctionLib
 		if(Double.isNaN(y) || Double.isInfinite(y)) {
 			return 0d;
 		}
-		BigDecimal bg = new BigDecimal(y).setScale(5, RoundingMode.UP);
+		BigDecimal bg = new BigDecimal(y).setScale(5, RoundingMode.HALF_UP);
 		return bg.doubleValue();
 	}
 	public static double F(List<List<Double>> ps, double x)
@@ -598,6 +599,13 @@ public class LocalFuctionLib
         }
         fs2.close();
         return g;
+    }
+    
+    public static GMap loadG2(String fileName) throws IOException, ClassNotFoundException {
+    	ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+                new File(fileName)));
+    	GMap g = (GMap) ois.readObject();
+    	return g;
     }
     
     public static double bytes2Double(byte[] arr) {
