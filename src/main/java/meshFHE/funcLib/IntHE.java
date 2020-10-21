@@ -26,6 +26,13 @@ public class IntHE {
     private static Map<String, GMap> gCache = new MaxSizeHashMap<String, GMap>(100);
 
 	static {
+		init();
+	}
+	
+	/**
+	 * åˆå§‹åŒ–åŠ å¯†å¼•æ“ï¼ŒåŠ è½½é…ç½®æ–‡ä»¶ï¼ŒåŠ è½½è¿ç®—å­—å…¸
+	 */
+	public static void init() {
 		Properties properties = new Properties();
 		try {
 			properties.load(IntHE.class.getResourceAsStream("/shaftstop.properties"));
@@ -39,9 +46,9 @@ public class IntHE {
 			if(defaultGMapFile != null && !defaultGMapFile.equals(""))
 				DEFAULT_GMAP_FILE = defaultGMapFile;
 			else
-				System.out.println("ERROR£ºÔËËã×ÖµäÎÄ¼şÎ´ÅäÖÃ£¡");
+				System.out.println("ERRORï¼šè¿ç®—å­—å…¸æ–‡ä»¶æœªé…ç½®ï¼");
 		} catch (IOException e) {
-			System.out.println("WARN£ºÅäÖÃÎÄ¼ş²»´æÔÚ£¬½«Ê¹ÓÃÄ¬ÈÏÅäÖÃÎÄ¼ş");
+			System.out.println("WARNï¼šé…ç½®æ–‡ä»¶ä¸å­˜åœ¨ï¼Œå°†ä½¿ç”¨é»˜è®¤é…ç½®æ–‡ä»¶");
 		}
 		File keyDir = new File(KEY_DIR);
 		if(!keyDir.exists())
@@ -49,19 +56,23 @@ public class IntHE {
 		File gMapDir = new File(GMAP_DIR);
 		if(!gMapDir.exists())
 			gMapDir.mkdirs();
+		long time1 = System.currentTimeMillis();
+		System.out.println("INFOï¼šå¼€å§‹åŠ è½½è¿ç®—å­—å…¸ï¼Œè¯·ç¨å€™..");
 		try {
 			g = LocalFuctionLib.loadG(DEFAULT_GMAP_FILE, period);
+			long time2 = System.currentTimeMillis();
+			System.out.println("INFOï¼šè¿ç®—å­—å…¸åŠ è½½å®Œæˆï¼Œè€—æ—¶ï¼š" + (time2 - time1)/1000 + "ç§’");
 		} catch (IOException e) {
-			System.out.println("ERROR£ºÔËËã×Öµä²»´æÔÚ£¡");
+			System.out.println("ERRORï¼šè¿ç®—å­—å…¸ä¸å­˜åœ¨ï¼");
 			e.printStackTrace();
 		}
 	}
     
 	/**
-	 * ¸ù¾İÓÃ»§±êÊ¶Éú³ÉË½Ô¿²¢³Ö¾Ã»¯Ë½Ô¿
-	 * @param uid ÓÃ»§±êÊ¶
-	 * @return Ë½Ô¿ÄÚÈİ
-	 * @throws IOException Ë½Ô¿ÎÄ¼şÉú³ÉÊ§°Ü
+	 * æ ¹æ®ç”¨æˆ·æ ‡è¯†ç”Ÿæˆç§é’¥å¹¶æŒä¹…åŒ–ç§é’¥
+	 * @param uid ç”¨æˆ·æ ‡è¯†
+	 * @return ç§é’¥å†…å®¹
+	 * @throws IOException ç§é’¥æ–‡ä»¶ç”Ÿæˆå¤±è´¥
 	 */
     public static SSKey genKey(String uid) throws IOException {
 		SSKey defaultKey = LocalFuctionLib.loadKey(IntHE.class.getResourceAsStream("/shaftstop_key"));
@@ -70,8 +81,8 @@ public class IntHE {
 	}
     
     /**
-     * ¸ù¾İÓÃ»§±êÊ¶É¾³ıË½Ô¿
-     * @param uid ÓÃ»§±êÊ¶
+     * æ ¹æ®ç”¨æˆ·æ ‡è¯†åˆ é™¤ç§é’¥
+     * @param uid ç”¨æˆ·æ ‡è¯†
      */
     public static void removeKey(String uid) {
 		String fileName = KEY_DIR + File.separator + uid;
@@ -84,11 +95,11 @@ public class IntHE {
     
 
     /**
-     * ¸ù¾İÓÃ»§±êÊ¶ºÍË½Ô¿Éú³ÉÔËËã×Öµä²¢³Ö¾Ã»¯
-     * @param key Ë½Ô¿
-     * @param uid ÓÃ»§±êÊ¶
-     * @return ÔËËã×Öµä
-     * @throws IOException ÔËËã×ÖµäÎÄ¼şÉú³ÉÊ§°Ü
+     * æ ¹æ®ç”¨æˆ·æ ‡è¯†å’Œç§é’¥ç”Ÿæˆè¿ç®—å­—å…¸å¹¶æŒä¹…åŒ–
+     * @param key ç§é’¥
+     * @param uid ç”¨æˆ·æ ‡è¯†
+     * @return è¿ç®—å­—å…¸
+     * @throws IOException è¿ç®—å­—å…¸æ–‡ä»¶ç”Ÿæˆå¤±è´¥
      */
 	public static GMap genGMap(SSKey key, String uid) throws IOException {
 		String fileName = GMAP_DIR + File.separator + uid;
@@ -97,8 +108,8 @@ public class IntHE {
 	
 
     /**
-     * ¸ù¾İÓÃ»§±êÊ¶É¾³ıÔËËã×Öµä
-     * @param uid ÓÃ»§±êÊ¶
+     * æ ¹æ®ç”¨æˆ·æ ‡è¯†åˆ é™¤è¿ç®—å­—å…¸
+     * @param uid ç”¨æˆ·æ ‡è¯†
      */
     public static void removeGMap(String uid) {
 		String fileName = GMAP_DIR + File.separator + uid;
@@ -110,10 +121,10 @@ public class IntHE {
     }
     
 	/**
-	 * ¸ù¾İÓÃ»§±êÊ¶»ñÈ¡Ë½Ô¿
-	 * @param uid ÓÃ»§±êÊ¶
-	 * @return Ë½Ô¿
-	 * @throws IOException Ë½Ô¿ÎÄ¼ş·ÃÎÊÒì³£
+	 * æ ¹æ®ç”¨æˆ·æ ‡è¯†è·å–ç§é’¥
+	 * @param uid ç”¨æˆ·æ ‡è¯†
+	 * @return ç§é’¥
+	 * @throws IOException ç§é’¥æ–‡ä»¶è®¿é—®å¼‚å¸¸
 	 */
 	public static SSKey getKey(String uid) throws IOException {
 		SSKey key = keyCache.get(uid);
@@ -125,10 +136,10 @@ public class IntHE {
 	}
 	
 	/**
-	 * ¸ù¾İÓÃ»§±êÊ¶»ñÈ¡ÔËËã×Öµä
-	 * @param uid ÓÃ»§±êÊ¶
-	 * @return ÔËËã×Öµä
-	 * @throws IOException ÔËËã×ÖµäÎÄ¼ş·ÃÎÊÒì³£
+	 * æ ¹æ®ç”¨æˆ·æ ‡è¯†è·å–è¿ç®—å­—å…¸
+	 * @param uid ç”¨æˆ·æ ‡è¯†
+	 * @return è¿ç®—å­—å…¸
+	 * @throws IOException è¿ç®—å­—å…¸æ–‡ä»¶è®¿é—®å¼‚å¸¸
 	 */
 	public static GMap getGMap(String uid) throws IOException {
 		GMap gmap = gCache.get(uid);
@@ -145,20 +156,20 @@ public class IntHE {
 	}
 
 	/**
-	 * ¼ÓÃÜ
-	 * @param m Ã÷ÎÄ
-	 * @param key Ë½Ô¿
-	 * @return ÃÜÎÄ
+	 * åŠ å¯†
+	 * @param m æ˜æ–‡
+	 * @param key ç§é’¥
+	 * @return å¯†æ–‡
 	 */
 	public static Cipher encrypt(double m, SSKey key) {
 		return CryptLib.Encrypt(new Random(), m, key);
 	}
 	
 	/**
-	 * ¼ÓÃÜ
-	 * @param m Ã÷ÎÄ
-	 * @param uid ÓÃ»§±êÊ¶
-	 * @return ÃÜÎÄ
+	 * åŠ å¯†
+	 * @param m æ˜æ–‡
+	 * @param uid ç”¨æˆ·æ ‡è¯†
+	 * @return å¯†æ–‡
 	 */
 	public static Cipher encrypt(double m, String uid) throws Exception {
 		try {
@@ -169,21 +180,21 @@ public class IntHE {
 	}
 
 	/**
-	 * ½âÃÜ
-	 * @param c ÃÜÎÄ
-	 * @param key Ë½Ô¿
-	 * @return Ã÷ÎÄ
+	 * è§£å¯†
+	 * @param c å¯†æ–‡
+	 * @param key ç§é’¥
+	 * @return æ˜æ–‡
 	 */
 	public static double decrypt(Cipher c, SSKey key) {
 		return CryptLib.Decrypt(c, key);
 	}
 	
 	/**
-	 * ½âÃÜ
-	 * @param c ÃÜÎÄ
-	 * @param uid ÓÃ»§±êÊ¶
-	 * @return Ã÷ÎÄ
-	 * @throws Exception Ë½Ô¿²»´æÔÚ
+	 * è§£å¯†
+	 * @param c å¯†æ–‡
+	 * @param uid ç”¨æˆ·æ ‡è¯†
+	 * @return æ˜æ–‡
+	 * @throws Exception ç§é’¥ä¸å­˜åœ¨
 	 */
 	public static double decrypt(Cipher c, String uid) throws Exception {
 		try {
@@ -194,23 +205,23 @@ public class IntHE {
 	}
 
 	/**
-	 * ÃÜÎÄ¼Ó·¨ÔËËã
-	 * @param c1 ÃÜÎÄ1 
-	 * @param c2 ÃÜÎÄ2
-	 * @param gmap ÔËËã×Öµä
-	 * @return ÔËËãºóµÄÃÜÎÄ
+	 * å¯†æ–‡åŠ æ³•è¿ç®—
+	 * @param c1 å¯†æ–‡1 
+	 * @param c2 å¯†æ–‡2
+	 * @param gmap è¿ç®—å­—å…¸
+	 * @return è¿ç®—åçš„å¯†æ–‡
 	 */
 	public static Cipher add(Cipher c1, Cipher c2, GMap gmap) {
 		return ServerFunctionOperate.GetCipherAddResult(1, 1, c1, c2, gmap, period);
 	}
 	
 	/**
-	 * ÃÜÎÄ¼Ó·¨ÔËËã
-	 * @param c1 ÃÜÎÄ1
-	 * @param c2 ÃÜÎÄ2
-	 * @param uid ÓÃ»§±êÊ¶
-	 * @return ÔËËãºóµÄÃÜÎÄ
-	 * @throws Exception ÔËËã×Öµä²»´æÔÚ
+	 * å¯†æ–‡åŠ æ³•è¿ç®—
+	 * @param c1 å¯†æ–‡1
+	 * @param c2 å¯†æ–‡2
+	 * @param uid ç”¨æˆ·æ ‡è¯†
+	 * @return è¿ç®—åçš„å¯†æ–‡
+	 * @throws Exception è¿ç®—å­—å…¸ä¸å­˜åœ¨
 	 */
 	public static Cipher add(Cipher c1, Cipher c2, String uid) throws Exception {
 		GMap g = null;
@@ -223,23 +234,23 @@ public class IntHE {
 	}
 
 	/**
-	 * ÃÜÎÄ¼õ·¨ÔËËã
-	 * @param c1 ÃÜÎÄ1 
-	 * @param c2 ÃÜÎÄ2
-	 * @param gmap ÔËËã×Öµä
-	 * @return ÔËËãºóµÄÃÜÎÄ
+	 * å¯†æ–‡å‡æ³•è¿ç®—
+	 * @param c1 å¯†æ–‡1 
+	 * @param c2 å¯†æ–‡2
+	 * @param gmap è¿ç®—å­—å…¸
+	 * @return è¿ç®—åçš„å¯†æ–‡
 	 */
 	public static Cipher substract(Cipher c1, Cipher c2, GMap gmap) {
 		return ServerFunctionOperate.GetCipherAddResult(1, -1, c1, c2, gmap, period);
 	}
 	
 	/**
-	 * ÃÜÎÄ¼õ·¨ÔËËã
-	 * @param c1 ÃÜÎÄ1
-	 * @param c2 ÃÜÎÄ2
-	 * @param uid ÓÃ»§±êÊ¶
-	 * @return ÔËËãºóµÄÃÜÎÄ
-	 * @throws Exception ÔËËã×Öµä²»´æÔÚ
+	 * å¯†æ–‡å‡æ³•è¿ç®—
+	 * @param c1 å¯†æ–‡1
+	 * @param c2 å¯†æ–‡2
+	 * @param uid ç”¨æˆ·æ ‡è¯†
+	 * @return è¿ç®—åçš„å¯†æ–‡
+	 * @throws Exception è¿ç®—å­—å…¸ä¸å­˜åœ¨
 	 */
 	public static Cipher substract(Cipher c1, Cipher c2, String uid) throws Exception {
 		GMap g = null;
@@ -252,23 +263,23 @@ public class IntHE {
 	}
 
 	/**
-	 * ÃÜÎÄ³Ë·¨ÔËËã
-	 * @param c1 ÃÜÎÄ1 
-	 * @param c2 ÃÜÎÄ2
-	 * @param gmap ÔËËã×Öµä
-	 * @return ÔËËãºóµÄÃÜÎÄ
+	 * å¯†æ–‡ä¹˜æ³•è¿ç®—
+	 * @param c1 å¯†æ–‡1 
+	 * @param c2 å¯†æ–‡2
+	 * @param gmap è¿ç®—å­—å…¸
+	 * @return è¿ç®—åçš„å¯†æ–‡
 	 */
 	public static Cipher multiply(Cipher c1, Cipher c2, GMap gmap) {
 		return ServerFunctionOperate.GetCipherMultiplyResult(c1, c2, gmap, period);
 	}
 	
 	/**
-	 * ÃÜÎÄ³Ë·¨ÔËËã
-	 * @param c1 ÃÜÎÄ1
-	 * @param c2 ÃÜÎÄ2
-	 * @param uid ÓÃ»§±êÊ¶
-	 * @return ÔËËãºóµÄÃÜÎÄ
-	 * @throws Exception ÔËËã×Öµä²»´æÔÚ
+	 * å¯†æ–‡ä¹˜æ³•è¿ç®—
+	 * @param c1 å¯†æ–‡1
+	 * @param c2 å¯†æ–‡2
+	 * @param uid ç”¨æˆ·æ ‡è¯†
+	 * @return è¿ç®—åçš„å¯†æ–‡
+	 * @throws Exception è¿ç®—å­—å…¸ä¸å­˜åœ¨
 	 */
 	public static Cipher multiply(Cipher c1, Cipher c2, String uid) throws Exception {
 		GMap g = null;
@@ -281,11 +292,11 @@ public class IntHE {
 	}
 
 	/**
-	 * ÃÜÎÄ±È½ÏÔËËã
-	 * @param c1 ÃÜÎÄ1 
-	 * @param c2 ÃÜÎÄ2
-	 * @param gmap ÔËËã×Öµä
-	 * @return ±È½Ï½á¹û "true"£º´óÓÚ£» "none":ÏàµÈ£»"false"£ºĞ¡ÓÚ
+	 * å¯†æ–‡æ¯”è¾ƒè¿ç®—
+	 * @param c1 å¯†æ–‡1 
+	 * @param c2 å¯†æ–‡2
+	 * @param gmap è¿ç®—å­—å…¸
+	 * @return æ¯”è¾ƒç»“æœ "true"ï¼šå¤§äºï¼› "none":ç›¸ç­‰ï¼›"false"ï¼šå°äº
 	 */
 	public static String compare(Cipher c1, Cipher c2, GMap gmap) {
 		return ServerFunctionOperate.Compare(substract(c1, c2, gmap), x0, x1, y0, y1, gmap, period);
@@ -293,12 +304,12 @@ public class IntHE {
 	
 	
 	/**
-	 * ÃÜÎÄ±È½ÏÔËËã
-	 * @param c1 ÃÜÎÄ1
-	 * @param c2 ÃÜÎÄ2
-	 * @param uid ÓÃ»§±êÊ¶
-	 * @return ±È½Ï½á¹û "true"£º´óÓÚ£» "none":ÏàµÈ£»"false"£ºĞ¡ÓÚ
-	 * @throws Exception ÔËËã×Öµä²»´æÔÚ
+	 * å¯†æ–‡æ¯”è¾ƒè¿ç®—
+	 * @param c1 å¯†æ–‡1
+	 * @param c2 å¯†æ–‡2
+	 * @param uid ç”¨æˆ·æ ‡è¯†
+	 * @return æ¯”è¾ƒç»“æœ "true"ï¼šå¤§äºï¼› "none":ç›¸ç­‰ï¼›"false"ï¼šå°äº
+	 * @throws Exception è¿ç®—å­—å…¸ä¸å­˜åœ¨
 	 */
 	public static String compare(Cipher c1, Cipher c2, String uid) throws Exception {
 		GMap g = null;
@@ -311,22 +322,22 @@ public class IntHE {
 	}
 
 	/**
-	 * ÃÜÎÄ×ª»»
-	 * @param c ÃÜÎÄ
-	 * @param gmap1 Ô´ÔËËã×Öµä
-	 * @param gmap2 Ä¿±êÔËËã×Öµä
-	 * @return ×ª»»ºóµÄÃÜÎÄ
+	 * å¯†æ–‡è½¬æ¢
+	 * @param c å¯†æ–‡
+	 * @param gmap1 æºè¿ç®—å­—å…¸
+	 * @param gmap2 ç›®æ ‡è¿ç®—å­—å…¸
+	 * @return è½¬æ¢åçš„å¯†æ–‡
 	 */
 	public static Cipher transfer(Cipher c, GMap gmap1, GMap gmap2) {
 		return ServerFunctionOperate.Transfer(c, gmap1, gmap2, period);
 	}
 	
 	/**
-	 * ÃÜÎÄ×ª»»
-	 * @param c ÃÜÎÄ
-	 * @param uid1 Ô´ÓÃ»§±êÊ¶
-	 * @param uid2 Ä¿±êÓÃ»§±êÊ¶
-	 * @return ×ª»»ºóµÄÃÜÎÄ
+	 * å¯†æ–‡è½¬æ¢
+	 * @param c å¯†æ–‡
+	 * @param uid1 æºç”¨æˆ·æ ‡è¯†
+	 * @param uid2 ç›®æ ‡ç”¨æˆ·æ ‡è¯†
+	 * @return è½¬æ¢åçš„å¯†æ–‡
 	 * @throws Exception
 	 */
 	public static Cipher transfer(Cipher c, String uid1, String uid2) throws Exception {

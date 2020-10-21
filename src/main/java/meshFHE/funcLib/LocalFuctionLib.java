@@ -1,4 +1,4 @@
-﻿package meshFHE.funcLib;
+package meshFHE.funcLib;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

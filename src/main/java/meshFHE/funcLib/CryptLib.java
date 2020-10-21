@@ -1,4 +1,4 @@
-﻿package meshFHE.funcLib;
+package meshFHE.funcLib;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
