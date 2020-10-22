@@ -159,10 +159,10 @@ public class ServerFunctionOperate
         double a2 = c2[0];
         double x2 = c2[1];
         double y2 = c2[2];
-        double u1 = LocalFuctionLib.h4r(x2, x1, period);
-        double u2 = LocalFuctionLib.h5r(y2, y1, period);
+        double u1 = LocalFuctionLib.h4(x1, y2, period);
+        double u2 = LocalFuctionLib.h5(y1, x2, period);
         //double a3 = a1 * a2 * G[4][x1][x2][0] / G[5][y1][y2][0];
-        double a3 = (a1 / a2) * (GetCurveValueOpt(u2, y2, G, period).get(5) / GetCurveValueOpt(u1, x2, G, period).get(4));
+        double a3 = a1 / a2 * GetCurveValueOpt(x1, y2, G, period).get(4) / GetCurveValueOpt(y1, x2, G, period).get(5);
         c[0] = a3;
         c[1] = u1;
         c[2] = u2;
@@ -298,8 +298,8 @@ public class ServerFunctionOperate
         double[] c2 = c.getCipherItem(1);
         double[] z1 = G1.zp1;
         double[] z2 = G1.zp2;
-        double[] z3 = G2.zp1;
-        double[] z4 = G2.zp2;
+        double[] z3 = G2.zp3;
+        double[] z4 = G2.zp4;
         double[] c1z1 = GetFunctionMultiplyResult(c1, z1, G1, period);
         double[] c1z3 = GetFunctionSplitResult(c1z1, z3, G2, period);
         double[] c2z2 = GetFunctionMultiplyResult(c2, z2, G1, period);

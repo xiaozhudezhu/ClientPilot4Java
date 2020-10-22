@@ -457,7 +457,7 @@ public class LocalFuctionLib
         double res = y - x - 5 < 0 ? y - x - 5 + period : y - x - 5;
         return res;
     }
-	public static SSKey genKey(java.util.Random r, int period, SSKey defaultKey, String fileName) throws IOException
+	public static SSKey genKey(java.util.Random r, int period, SSKey defaultKey, int accuracy, String fileName) throws IOException
 	{
 		File f = new File(fileName);
 		if(f.exists())
@@ -474,6 +474,7 @@ public class LocalFuctionLib
 			List<List<Double>> f2 = LocalFuctionLib.genFPoints(r, max, period * time, 300, -0.1, 1 / (double)time1, 1 / (double)time);
 			key = new SSKey(r, period, f1, f2);
 		}
+		key.accuracy = accuracy;
         String keyStr = JSON.toJSONString(key);
         f.createNewFile();
     	FileOutputStream fs = new FileOutputStream(f);
@@ -503,11 +504,17 @@ public class LocalFuctionLib
         map.z11 = CryptLib.Encrypt(r, key.zi.get(0) * key.zi.get(0), key);
         map.z12 = CryptLib.Encrypt(r, key.zi.get(0) * key.zi.get(1), key);
         map.z22 = CryptLib.Encrypt(r, key.zi.get(1) * key.zi.get(1), key);
+        map.x0 = String.valueOf((key.zi.get(0) - (r.nextInt(50) + 1)/1000d));
+        map.x1 = String.valueOf((key.zi.get(0) + (r.nextInt(50) + 1)/1000d));
+        map.y0 = String.valueOf((key.zi.get(1) - (r.nextInt(50) + 1)/1000d));
+        map.y1 = String.valueOf((key.zi.get(1) + (r.nextInt(50) + 1)/1000d));
     }
     public static void calKeyZP(java.util.Random r, SSKey key, GMap map)
     {
         map.zp1 = CryptLib.EncryptPartList(r, key.zi.get(0), key);
         map.zp2 = CryptLib.EncryptPartList(r, key.zi.get(1), key);
+        map.zp3 = CryptLib.EncryptPartList2(r, key.zi.get(0), key);
+        map.zp4 = CryptLib.EncryptPartList2(r, key.zi.get(1), key);
     }
     
     public static SSKey loadKey(InputStream is) throws IOException {

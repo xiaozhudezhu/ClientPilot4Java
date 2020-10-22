@@ -48,7 +48,7 @@ public class CryptLib
 		parts.add(part2);
 		return parts;
 	}
-	public static double Decrypt(Cipher cipher, SSKey key)
+	public static double Decrypt(Cipher cipher, SSKey key, int accuracy)
 	{
 		double plain = 0;
 		for (int i = 0; i < cipher.multiPow.size(); i++)
@@ -65,8 +65,12 @@ public class CryptLib
 			plain += ai * LocalFuctionLib.get2BezierY(xi, key.f1) / LocalFuctionLib.get2BezierY(yi, key.f2) * z;
 		}
 		//plain += cipher.cipherItems[3][0];
-		BigDecimal bg = new BigDecimal(plain).setScale(key.accuracy, RoundingMode.HALF_UP);
+		BigDecimal bg = new BigDecimal(plain).setScale(accuracy, RoundingMode.HALF_UP);
 		return bg.doubleValue();
+	}
+	public static double Decrypt(Cipher cipher, SSKey key)
+	{
+		return Decrypt(cipher, key, key.accuracy);
 	}
 	public static double DecryptNoPower(double a1, double x1, double y1, double a2, double x2, double y2, SSKey key)
 	{
@@ -88,7 +92,16 @@ public class CryptLib
         result[0] = 0d;
         result[1] = (double) r.nextInt(1000);
         result[2] = (double) r.nextInt(1000);
-        result[0] = z * LocalFuctionLib.get2BezierY(result[1], key.f2) / LocalFuctionLib.get2BezierY(result[1], key.f1);
+        result[0] = z * LocalFuctionLib.get2BezierY(result[2], key.f2) / LocalFuctionLib.get2BezierY(result[1], key.f1);
+        return result;
+    }
+	public static double[] EncryptPartList2(java.util.Random r, double z, SSKey key) // 20201022
+    {
+		double[] result = new double[3];
+		result[0] = 0d;
+        result[1] = (double) r.nextInt(1000);
+        result[2] = (double) r.nextInt(1000);
+        result[0] = z * LocalFuctionLib.get2BezierY(result[2], key.f1) / LocalFuctionLib.get2BezierY(result[1], key.f2);
         return result;
     }
 	public static String EncryptPart(java.util.Random r, double z, SSKey key)

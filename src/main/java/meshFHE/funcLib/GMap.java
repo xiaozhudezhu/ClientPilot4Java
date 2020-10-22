@@ -15,7 +15,12 @@ public class GMap implements Serializable
 	public double[] xs, ys;
 	public static double step = 1;
 	public Cipher z11, z12, z22;
-    public double[] zp1, zp2;
+    public double[] zp1, zp2, zp3, zp4;
+    
+    public String x0 = "92";
+    public String x1 = "93";
+    public String y0 = "89";
+    public String y1 = "90";
     
     public GMap() {
     	

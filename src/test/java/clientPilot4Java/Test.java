@@ -63,8 +63,8 @@ public class Test {
 		//String uid = "3f1a57a8-9978-4d38-aa29-946f2e3014d0";
 		//String uid2 = "38fe9608-66d3-45f4-a7ef-ebf8e71158ba";
 		for(int i = 0; i < 100; i ++) {
-			double d1 = new Random().nextInt(100);
-			double d2 = new Random().nextInt(100);
+			double d1 = new Random().nextInt(10000)/100d;
+			double d2 = new Random().nextInt(10000)/100d;
 			//double d1 = 66;
 			//double d2 = 88;
 			System.out.println("d1,d2:" + d1 + "," + d2);
@@ -89,7 +89,8 @@ public class Test {
 			
 			Cipher cipher4 = IntHE.transfer(cipher1, uid, uid2);
 			result = IntHE.decrypt(cipher4, uid2);
-			System.out.println("transfer:" + result);
+			if(result != d1)
+				System.out.println("transfer:" + result);
 
 		}
 		System.out.println("");

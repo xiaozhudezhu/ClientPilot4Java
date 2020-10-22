@@ -1,19 +1,12 @@
 package meshFHE.funcLib;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
 public class IntHE {
-	
-	private static String x0 = "92";
-	private static String x1 = "93";
-    private static String y0 = "89";
-    private static String y1 = "90";
     
     private static int period = 1000;
     
@@ -23,6 +16,7 @@ public class IntHE {
     
     private static String KEY_DIR = getPath() + "/shaftstop/key";
     private static String GMAP_DIR = getPath() + "/shaftstop/gmap";
+    private static int DEFAULT_DECRYPT_ACCURACY = 0;
     
     private static Map<String, SSKey> keyCache = new MaxSizeHashMap<String, SSKey>(100);
     private static Map<String, GMap> gCache = new MaxSizeHashMap<String, GMap>(100);
@@ -41,6 +35,7 @@ public class IntHE {
 			String keyDir = properties.getProperty("KEY_DIR");
 			String gmapDir = properties.getProperty("GMAP_DIR");
 			String defaultGMapFile = properties.getProperty("DEFAULT_GMAP_FILE");
+			String defaultDecryptAccuracy = properties.getProperty("DEFAULT_DECRYPT_ACCURACY");
 			if(keyDir != null && !keyDir.equals(""))
 				KEY_DIR = keyDir;
 			if(gmapDir != null && !gmapDir.equals(""))
@@ -49,6 +44,8 @@ public class IntHE {
 				DEFAULT_GMAP_FILE = defaultGMapFile;
 			else
 				System.out.println("ERROR：运算字典文件未配置！");
+			if(defaultDecryptAccuracy != null && !defaultDecryptAccuracy.equals(""))
+				DEFAULT_DECRYPT_ACCURACY = Integer.parseInt(defaultDecryptAccuracy);
 		} catch (IOException e) {
 			System.out.println("WARN：配置文件不存在，将使用默认配置文件");
 		}
@@ -59,13 +56,13 @@ public class IntHE {
 		if(!gMapDir.exists())
 			gMapDir.mkdirs();
 		long time1 = System.currentTimeMillis();
-		System.out.println("INFO：开始加载运算字典，请稍候..");
+		System.out.println("INFO：开始加载预置运算字典，请稍候..");
 		try {
 			g = LocalFuctionLib.loadG2(DEFAULT_GMAP_FILE);
 			long time2 = System.currentTimeMillis();
-			System.out.println("INFO：运算字典加载完成，耗时：" + (time2 - time1)/1000 + "秒");
+			System.out.println("INFO：预置运算字典加载完成，耗时：" + (time2 - time1)/1000 + "秒");
 		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("ERROR：运算字典不存在！");
+			System.out.println("ERROR：预置运算字典不存在！");
 			e.printStackTrace();
 		}
 	}
@@ -79,7 +76,7 @@ public class IntHE {
     public static SSKey genKey(String uid) throws IOException {
 		SSKey defaultKey = LocalFuctionLib.loadKey(IntHE.class.getResourceAsStream("/shaftstop_key"));
 		String fileName = KEY_DIR + File.separator + uid;
-		return LocalFuctionLib.genKey(new Random(), period, defaultKey, fileName);
+		return LocalFuctionLib.genKey(new Random(), period, defaultKey, DEFAULT_DECRYPT_ACCURACY, fileName);
 	}
     
     /**
@@ -158,7 +155,7 @@ public class IntHE {
 	}
 
 	/**
-	 * 加密
+	 * 根据私钥加密
 	 * @param m 明文
 	 * @param key 私钥
 	 * @return 密文
@@ -168,10 +165,11 @@ public class IntHE {
 	}
 	
 	/**
-	 * 加密
+	 * 根据用户标识加密
 	 * @param m 明文
 	 * @param uid 用户标识
 	 * @return 密文
+	 * @throws Exception 私钥不存在
 	 */
 	public static Cipher encrypt(double m, String uid) throws Exception {
 		try {
@@ -182,7 +180,7 @@ public class IntHE {
 	}
 
 	/**
-	 * 解密
+	 * 解密（使用默认精度）
 	 * @param c 密文
 	 * @param key 私钥
 	 * @return 明文
@@ -192,7 +190,18 @@ public class IntHE {
 	}
 	
 	/**
-	 * 解密
+	 * 解密（使用特定精度）
+	 * @param c 密文
+	 * @param key 私钥
+	 * @param accuracy 精度，即保留小数位数
+	 * @return 明文
+	 */
+	public static double decrypt(Cipher c, SSKey key, int accuracy) {
+		return CryptLib.Decrypt(c, key, accuracy);
+	}
+	
+	/**
+	 * 根据用户标识解密（使用默认精度）
 	 * @param c 密文
 	 * @param uid 用户标识
 	 * @return 明文
@@ -201,6 +210,22 @@ public class IntHE {
 	public static double decrypt(Cipher c, String uid) throws Exception {
 		try {
 			return decrypt(c, getKey(uid));
+		} catch (IOException e) {
+			throw new Exception("key not exists");
+		}	
+	}
+	
+	/**
+	 * 根据用户标识解密（使用特定精度）
+	 * @param c 密文
+	 * @param uid 用户标识
+	 * @param accuracy 精度，即保留小数位数
+	 * @return 明文
+	 * @throws Exception 私钥不存在
+	 */
+	public static double decrypt(Cipher c, String uid, int accuracy) throws Exception {
+		try {
+			return decrypt(c, getKey(uid), accuracy);
 		} catch (IOException e) {
 			throw new Exception("key not exists");
 		}	
@@ -298,10 +323,10 @@ public class IntHE {
 	 * @param c1 密文1 
 	 * @param c2 密文2
 	 * @param gmap 运算字典
-	 * @return 比较结果 "true"：大于； "none":相等；"false"：小于
+	 * @return 比较结果 "true"：大于；"false"：小于 ；"none":无法比较；
 	 */
 	public static String compare(Cipher c1, Cipher c2, GMap gmap) {
-		return ServerFunctionOperate.Compare(substract(c1, c2, gmap), x0, x1, y0, y1, gmap, period);
+		return ServerFunctionOperate.Compare(substract(c1, c2, gmap), gmap.x0, gmap.x1, gmap.y0, gmap.y1, gmap, period);
 	}
 	
 	
