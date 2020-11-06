@@ -10,7 +10,7 @@ public class IntHE {
     
     private static int period = 1000;
     
-    private static GMap g;
+    private static GMap g = null;
     
     private static String DEFAULT_GMAP_FILE = "";
     
@@ -22,7 +22,24 @@ public class IntHE {
     private static Map<String, GMap> gCache = new MaxSizeHashMap<String, GMap>(100);
 
 	static {
-		init();
+		//init();
+	}
+	
+	/**
+	 * 初始化加密引擎，加载配置文件，加载运算字典
+	 */
+	public static void init(String keyDir, String gmapDir, String defaultGMapFile, String defaultDecryptAccuracy) {
+		if(keyDir != null && !keyDir.equals(""))
+			KEY_DIR = keyDir;
+		if(gmapDir != null && !gmapDir.equals(""))
+			GMAP_DIR = gmapDir;
+		if(defaultGMapFile != null && !defaultGMapFile.equals(""))
+			DEFAULT_GMAP_FILE = defaultGMapFile;
+		else
+			System.out.println("ERROR：运算字典文件未配置！");
+		if(defaultDecryptAccuracy != null && !defaultDecryptAccuracy.equals(""))
+			DEFAULT_DECRYPT_ACCURACY = Integer.parseInt(defaultDecryptAccuracy);
+		init2();
 	}
 	
 	/**
@@ -49,6 +66,15 @@ public class IntHE {
 		} catch (IOException e) {
 			System.out.println("WARN：配置文件不存在，将使用默认配置文件");
 		}
+		init2();
+	}
+	
+	private static void init2() {
+		System.out.println("INFO：Shaftstop配置如下：");
+		System.out.println("INFO：KEY_DIR " + KEY_DIR);
+		System.out.println("INFO：GMAP_DIR " + GMAP_DIR);
+		System.out.println("INFO：DEFAULT_GMAP_FILE " + DEFAULT_GMAP_FILE);
+		System.out.println("INFO：DEFAULT_DECRYPT_ACCURACY " + DEFAULT_DECRYPT_ACCURACY);
 		File keyDir = new File(KEY_DIR);
 		if(!keyDir.exists())
 			keyDir.mkdirs();
